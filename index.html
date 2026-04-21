@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asthma ER — Emergency & Pulmonology Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --card: #1c2330;
+    --border: #30363d;
+    --border2: #21262d;
+    --text: #e6edf3;
+    --muted: #7d8590;
+    --accent: #58a6ff;
+    --accent2: #79c0ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --orange: #f0883e;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --cyan: #39d353;
+    --teal: #56d364;
+    --mild: #1a7f37;
+    --mild-bg: #0d2614;
+    --mild-border: #2ea043;
+    --mod: #9a6700;
+    --mod-bg: #271d00;
+    --mod-border: #d29922;
+    --sev: #b91c1c;
+    --sev-bg: #2d0a0a;
+    --sev-border: #f85149;
+    --life: #6d28d9;
+    --life-bg: #1e0a3c;
+    --life-border: #bc8cff;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px 10px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .header-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: linear-gradient(135deg, #1a4a6b, #0d2d4a);
+    border: 1px solid #1f6feb;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .header-title { font-size: 17px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .header-sub { font-size: 11px; color: var(--muted); font-weight: 400; }
+  .badge-er {
+    margin-left: auto;
+    background: #161b22; border: 1px solid #f85149;
+    color: #f85149; font-size: 10px; font-weight: 600;
+    padding: 2px 7px; border-radius: 20px; letter-spacing: 0.5px;
+  }
+
+  /* NAV TABS */
+  .nav { display: flex; gap: 2px; overflow-x: auto; padding-bottom: 2px; }
+  .nav::-webkit-scrollbar { height: 0; }
+  .tab {
+    padding: 6px 12px; border-radius: 6px; border: none;
+    background: transparent; color: var(--muted);
+    font-size: 12px; font-weight: 500; font-family: 'DM Sans', sans-serif;
+    cursor: pointer; white-space: nowrap; transition: all 0.15s;
+  }
+  .tab:hover { background: var(--surface); color: var(--text); }
+  .tab.active { background: var(--accent); color: #0d1117; font-weight: 700; }
+
+  /* MAIN */
+  .main { max-width: 680px; margin: 0 auto; padding: 14px 12px 80px; }
+
+  /* SECTION */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* SEVERITY BADGES */
+  .sev-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .sev-badge.mild { background: var(--mild-bg); color: #3fb950; border: 1px solid var(--mild-border); }
+  .sev-badge.mod { background: var(--mod-bg); color: #d29922; border: 1px solid var(--mod-border); }
+  .sev-badge.sev { background: var(--sev-bg); color: #f85149; border: 1px solid var(--sev-border); }
+  .sev-badge.life { background: var(--life-bg); color: #bc8cff; border: 1px solid var(--life-border); }
+
+  /* SECTION TITLE */
+  .sec-title {
+    font-size: 13px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin: 20px 0 10px; display: flex; align-items: center; gap: 8px;
+  }
+  .sec-title::after {
+    content: ''; flex: 1; height: 1px; background: var(--border2);
+  }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 11px 14px;
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .card-header:hover { background: rgba(255,255,255,0.03); }
+  .card-title { font-size: 13px; font-weight: 600; flex: 1; }
+  .card-arrow {
+    color: var(--muted); font-size: 11px; transition: transform 0.2s;
+  }
+  .card.open .card-arrow { transform: rotate(180deg); }
+  .card-body {
+    display: none;
+    padding: 0 14px 14px;
+    border-top: 1px solid var(--border2);
+  }
+  .card.open .card-body { display: block; }
+
+  /* SEVERITY TABLE */
+  .sev-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .sev-block {
+    border-radius: var(--radius-sm);
+    border: 1px solid;
+    overflow: hidden;
+  }
+  .sev-block.mild { border-color: var(--mild-border); }
+  .sev-block.mod { border-color: var(--mod-border); }
+  .sev-block.sev { border-color: var(--sev-border); }
+  .sev-block.life { border-color: var(--life-border); }
+  .sev-block-head {
+    padding: 8px 12px;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700;
+  }
+  .sev-block.mild .sev-block-head { background: var(--mild-bg); color: #3fb950; }
+  .sev-block.mod .sev-block-head { background: var(--mod-bg); color: #d29922; }
+  .sev-block.sev .sev-block-head { background: var(--sev-bg); color: #f85149; }
+  .sev-block.life .sev-block-head { background: var(--life-bg); color: #bc8cff; }
+  .sev-block-body { padding: 10px 12px; background: rgba(255,255,255,0.02); }
+
+  /* PARAM ROW */
+  .param-row {
+    display: flex; justify-content: space-between;
+    padding: 4px 0; border-bottom: 1px solid var(--border2);
+    font-size: 12px;
+  }
+  .param-row:last-child { border-bottom: none; }
+  .param-label { color: var(--muted); }
+  .param-val { font-weight: 600; color: var(--text); text-align: right; max-width: 55%; }
+
+  /* DRUG ROW */
+  .drug-block {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  .drug-name {
+    font-size: 13px; font-weight: 700; color: var(--accent2);
+    margin-bottom: 4px;
+  }
+  .drug-brand { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .drug-info { font-size: 12px; color: var(--text); line-height: 1.6; }
+  .drug-dose {
+    display: inline-block;
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.3);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--accent2);
+    margin: 2px 0;
+  }
+  .drug-note {
+    margin-top: 5px; font-size: 11px; color: var(--muted);
+    font-style: italic; line-height: 1.4;
+  }
+
+  /* ALGORITHM */
+  .algo-step {
+    display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start;
+  }
+  .algo-num {
+    min-width: 22px; height: 22px;
+    background: var(--accent); color: #0d1117;
+    border-radius: 50%; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px; flex-shrink: 0;
+  }
+  .algo-num.red { background: var(--red); }
+  .algo-num.yellow { background: var(--yellow); }
+  .algo-num.green { background: var(--green); }
+  .algo-num.purple { background: var(--purple); color: #0d1117; }
+  .algo-text { font-size: 12px; line-height: 1.6; flex: 1; }
+  .algo-text strong { color: var(--accent2); }
+
+  /* INLINE TAG */
+  .tag {
+    display: inline-block; padding: 1px 6px; border-radius: 4px;
+    font-size: 10px; font-weight: 600; vertical-align: middle;
+  }
+  .tag-r { background: rgba(248,81,73,0.15); color: #f85149; border: 1px solid rgba(248,81,73,0.3); }
+  .tag-y { background: rgba(210,153,34,0.15); color: #d29922; border: 1px solid rgba(210,153,34,0.3); }
+  .tag-g { background: rgba(63,185,80,0.15); color: #3fb950; border: 1px solid rgba(63,185,80,0.3); }
+  .tag-b { background: rgba(88,166,255,0.15); color: #58a6ff; border: 1px solid rgba(88,166,255,0.3); }
+  .tag-p { background: rgba(188,140,255,0.15); color: #bc8cff; border: 1px solid rgba(188,140,255,0.3); }
+
+  /* WARN BOX */
+  .warn-box {
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin: 8px 0;
+    font-size: 12px; line-height: 1.6;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .warn-box.red { background: rgba(248,81,73,0.08); border: 1px solid rgba(248,81,73,0.3); }
+  .warn-box.yellow { background: rgba(210,153,34,0.08); border: 1px solid rgba(210,153,34,0.3); }
+  .warn-box.blue { background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.3); }
+  .warn-box.purple { background: rgba(188,140,255,0.08); border: 1px solid rgba(188,140,255,0.3); }
+  .warn-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* CALC */
+  .calc-box {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin: 10px 0;
+  }
+  .calc-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--accent2); }
+  .calc-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .calc-label { font-size: 12px; color: var(--muted); min-width: 80px; }
+  .calc-input {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 6px 10px;
+    color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px;
+    width: 90px; outline: none; transition: border 0.15s;
+  }
+  .calc-input:focus { border-color: var(--accent); }
+  .calc-unit { font-size: 11px; color: var(--muted); }
+  .calc-btn {
+    background: var(--accent); color: #0d1117;
+    border: none; border-radius: 6px; padding: 7px 14px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: opacity 0.15s;
+  }
+  .calc-btn:hover { opacity: 0.85; }
+  .calc-result {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 10px 12px;
+    margin-top: 10px; font-size: 12px; line-height: 1.8; display: none;
+  }
+  .calc-result.show { display: block; }
+  .calc-result-line { display: flex; justify-content: space-between; }
+  .calc-result-key { color: var(--muted); }
+  .calc-result-val { font-weight: 700; color: var(--accent2); font-family: 'DM Mono', monospace; }
+  .calc-result-val.red { color: var(--red); }
+  .calc-result-val.yellow { color: var(--yellow); }
+
+  /* FLOW CHART */
+  .flow-container { overflow-x: auto; margin: 10px 0; }
+  .flow-box {
+    border-radius: 8px; padding: 8px 12px;
+    font-size: 12px; text-align: center; font-weight: 600;
+    margin: 0 auto 4px;
+  }
+  .flow-box.start { background: #1a3a5c; border: 2px solid #58a6ff; color: #79c0ff; max-width: 280px; }
+  .flow-box.decision { background: #1e1a00; border: 2px solid #d29922; color: #d29922; max-width: 280px; transform: none; }
+  .flow-box.action-g { background: var(--mild-bg); border: 1px solid var(--mild-border); color: #3fb950; max-width: 280px; }
+  .flow-box.action-y { background: var(--mod-bg); border: 1px solid var(--mod-border); color: #d29922; max-width: 280px; }
+  .flow-box.action-r { background: var(--sev-bg); border: 1px solid var(--sev-border); color: #f85149; max-width: 280px; }
+  .flow-box.action-p { background: var(--life-bg); border: 1px solid var(--life-border); color: #bc8cff; max-width: 280px; }
+  .flow-arrow { text-align: center; color: var(--muted); font-size: 18px; line-height: 1.2; margin: 1px 0; }
+  .flow-branch {
+    display: flex; gap: 8px; justify-content: center;
+    margin: 4px 0;
+  }
+  .flow-branch-box { flex: 1; max-width: 160px; }
+
+  /* CHECKLIST */
+  .checklist-item {
+    display: flex; gap: 8px; align-items: flex-start;
+    padding: 5px 0; border-bottom: 1px solid var(--border2);
+    font-size: 12px; cursor: pointer;
+  }
+  .checklist-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 16px; height: 16px; border-radius: 4px;
+    border: 2px solid var(--border); flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .checklist-item.checked .check-box {
+    background: var(--green); border-color: var(--green); color: #0d1117;
+  }
+  .checklist-item.checked .check-label { text-decoration: line-through; color: var(--muted); }
+  .check-label { flex: 1; line-height: 1.5; }
+
+  /* ABG TABLE */
+  .table-w {
+    width: 100%; border-collapse: collapse;
+    font-size: 11.5px; margin-top: 8px;
+  }
+  .table-w th {
+    background: rgba(255,255,255,0.04);
+    padding: 7px 10px; text-align: left;
+    font-size: 10px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+  .table-w td {
+    padding: 7px 10px; border-bottom: 1px solid var(--border2);
+    color: var(--text); line-height: 1.4;
+  }
+  .table-w tr:last-child td { border-bottom: none; }
+  .table-w tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* SCORE */
+  .score-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .score-label { font-size: 12px; color: var(--muted); flex: 1; }
+  .score-opts { display: flex; gap: 4px; }
+  .score-opt {
+    padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border);
+    background: var(--surface); font-size: 11px; color: var(--muted);
+    cursor: pointer; transition: all 0.1s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .score-opt:hover { border-color: var(--accent); color: var(--accent); }
+  .score-opt.sel { background: var(--accent); color: #0d1117; border-color: var(--accent); font-weight: 700; }
+  .score-total {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 10px 12px;
+    margin-top: 10px; font-size: 12px; display: none;
+  }
+  .score-total.show { display: block; }
+  .score-total-val { font-size: 22px; font-weight: 700; }
+
+  /* RESP THERAPY BOX */
+  .rt-box {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; margin-top: 8px;
+  }
+  .rt-item {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+  }
+  .rt-item-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+  .rt-item-val { font-size: 12px; color: var(--text); line-height: 1.5; }
+
+  /* DISCHARGE */
+  .dc-section { margin-bottom: 14px; }
+  .dc-title { font-size: 12px; font-weight: 700; color: var(--accent2); margin-bottom: 6px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 400px) {
+    .rt-box { grid-template-columns: 1fr; }
+    .score-opts { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="header-icon">🫁</div>
+    <div>
+      <div class="header-title">Asthma Exacerbation</div>
+      <div class="header-sub">Emergency & Pulmonology Reference · Indonesia</div>
+    </div>
+    <div class="badge-er">ER</div>
+  </div>
+  <div class="nav">
+    <button class="tab active" onclick="showTab('overview')">Overview</button>
+    <button class="tab" onclick="showTab('assess')">Assessment</button>
+    <button class="tab" onclick="showTab('algorithm')">Algorithm</button>
+    <button class="tab" onclick="showTab('drugs')">Drugs</button>
+    <button class="tab" onclick="showTab('icu')">ICU/NIV</button>
+    <button class="tab" onclick="showTab('discharge')">Discharge</button>
+    <button class="tab" onclick="showTab('calc')">Calculators</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════════════════════ OVERVIEW ═══════════════════════════ -->
+<div class="section active" id="sec-overview">
+
+  <div class="warn-box red">
+    <span class="warn-icon">⚡</span>
+    <div><strong style="color:#f85149">Near-fatal features:</strong> Silent chest, cyanosis, poor respiratory effort, bradycardia, hypotension, confusion/coma, PaCO₂ ≥45 mmHg. <strong>Immediate senior ± ICU involvement.</strong></div>
+  </div>
+
+  <div class="sec-title">Pathophysiology Snapshot</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔬</span>
+      <span class="card-title">Core Pathophysiology</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+      <div class="algo-step"><div class="algo-num" style="background:#f85149">1</div><div class="algo-text"><strong>Bronchospasm</strong> — smooth muscle contraction from mast cell/eosinophil mediators (histamine, LTC4/D4, PGD2). Reversible with bronchodilators.</div></div>
+      <div class="algo-step"><div class="algo-num" style="background:#f0883e">2</div><div class="algo-text"><strong>Airway edema</strong> — vascular leak, mucosal swelling. Responds to corticosteroids (hours).</div></div>
+      <div class="algo-step"><div class="algo-num" style="background:#d29922">3</div><div class="algo-text"><strong>Mucus hypersecretion</strong> — goblet cell + submucosal gland hyperplasia. Creates mucus plugging, basis of "mucoid impaction."</div></div>
+      <div class="algo-step"><div class="algo-num" style="background:#bc8cff">4</div><div class="algo-text"><strong>Dynamic hyperinflation</strong> — air trapping → ↑ FRC, intrinsic PEEP. Flattened diaphragm → mechanical disadvantage. Risk of barotrauma if intubated.</div></div>
+      <div class="algo-step"><div class="algo-num" style="background:#58a6ff">5</div><div class="algo-text"><strong>V/Q mismatch</strong> — shunt + dead space → hypoxemia early, then hypercapnia when severely fatigued/obstructed.</div></div>
+      <div class="warn-box yellow" style="margin-top:6px">
+        <span class="warn-icon">⚠️</span>
+        <div><strong>Early severe attack:</strong> Hyperventilation → respiratory alkalosis. <strong>Normocapnia in exhausted patient = impending failure.</strong> Hypercapnia = very late/life-threatening sign.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📋</span>
+      <span class="card-title">History & Risk Factors for Fatal Attack</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:10px">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Ask specifically — these predict ICU requirement:</div>
+      <table class="table-w">
+        <tr><th>Factor</th><th>Clinical Implication</th></tr>
+        <tr><td>Prior intubation / ICU for asthma</td><td style="color:#f85149;font-weight:600">Highest risk — prepare early</td></tr>
+        <tr><td>≥2 hospitalisations/year</td><td>Severe/difficult-to-treat asthma</td></tr>
+        <tr><td>≥3 ED visits/year</td><td>Poor control or poor adherence</td></tr>
+        <tr><td>OCS use in last month</td><td>Severe baseline</td></tr>
+        <tr><td>Not using ICS at all</td><td>Undertreated</td></tr>
+        <tr><td>Current or recent heavy SABA use</td><td>Rebound → risk of fatal attack</td></tr>
+        <tr><td>Sensitivity to Alternaria or cockroach</td><td>Higher fatality risk</td></tr>
+        <tr><td>Food allergy + asthma</td><td>Anaphylaxis overlap risk</td></tr>
+        <tr><td>Depression / non-adherence</td><td>Independent fatal predictor</td></tr>
+        <tr><td>Low SES, no regular follow-up</td><td>Late presentation</td></tr>
+      </table>
+      <div class="warn-box blue" style="margin-top:8px">
+        <span class="warn-icon">💊</span>
+        <div>Document: current controller, frequency of rescue SABA/week, last OCS course, allergies, NSAID/aspirin sensitivity (Samter's triad).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔍</span>
+      <span class="card-title">Differential Diagnosis — "Not all wheeze is asthma"</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:10px">
+      <table class="table-w">
+        <tr><th>Diagnosis</th><th>Distinguishing Clue</th></tr>
+        <tr><td>COPD exacerbation</td><td>Smoking Hx ≥10 py, age >40, persistent obstruction</td></tr>
+        <tr><td>Cardiac asthma (APO)</td><td>Orthopnea, S3, JVD, CXR: bilateral infiltrates, BNP ↑↑</td></tr>
+        <tr><td>Anaphylaxis</td><td>Urticaria, angioedema, hypotension, exposure Hx</td></tr>
+        <tr><td>Foreign body / laryngeal</td><td>Pediatric, sudden onset, stridor, no response to BD</td></tr>
+        <tr><td>Vocal cord dysfunction</td><td>Inspiratory stridor, emotional trigger, flat flow-volume loop, normal SpO₂</td></tr>
+        <tr><td>Pneumothorax</td><td>Unilateral ↓ BS, sudden pleuritic pain, CXR</td></tr>
+        <tr><td>PE</td><td>DVT signs, tachycardia, pleuritic pain, Wells/D-dimer</td></tr>
+        <tr><td>Tracheal stenosis</td><td>Post-intubation Hx, fixed obstruction on spirometry</td></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════ ASSESSMENT ═══════════════════════════ -->
+<div class="section" id="sec-assess">
+
+  <div class="sec-title">Severity Classification (GINA 2024)</div>
+
+  <div class="sev-grid">
+    <div class="sev-block mild">
+      <div class="sev-block-head">🟢 MILD</div>
+      <div class="sev-block-body">
+        <div class="param-row"><span class="param-label">Dyspnea</span><span class="param-val">On exertion / walking</span></div>
+        <div class="param-row"><span class="param-label">Speech</span><span class="param-val">Sentences</span></div>
+        <div class="param-row"><span class="param-label">Alertness</span><span class="param-val">May be agitated</span></div>
+        <div class="param-row"><span class="param-label">RR</span><span class="param-val">Increased</span></div>
+        <div class="param-row"><span class="param-label">HR</span><span class="param-val">&lt;100 bpm</span></div>
+        <div class="param-row"><span class="param-label">Accessory muscles</span><span class="param-val">Usually not</span></div>
+        <div class="param-row"><span class="param-label">Wheeze</span><span class="param-val">Moderate, end-exp</span></div>
+        <div class="param-row"><span class="param-label">SpO₂ (room air)</span><span class="param-val" style="color:#3fb950">>95%</span></div>
+        <div class="param-row"><span class="param-label">PEF</span><span class="param-val" style="color:#3fb950">≥70% predicted/best</span></div>
+        <div class="param-row"><span class="param-label">PaO₂ (if done)</span><span class="param-val">Normal</span></div>
+        <div class="param-row"><span class="param-label">PaCO₂</span><span class="param-val">&lt;45 mmHg</span></div>
+      </div>
+    </div>
+
+    <div class="sev-block mod">
+      <div class="sev-block-head">🟡 MODERATE</div>
+      <div class="sev-block-body">
+        <div class="param-row"><span class="param-label">Dyspnea</span><span class="param-val">At rest / talking</span></div>
+        <div class="param-row"><span class="param-label">Speech</span><span class="param-val">Phrases only</span></div>
+        <div class="param-row"><span class="param-label">Alertness</span><span class="param-val">Usually agitated</span></div>
+        <div class="param-row"><span class="param-label">RR</span><span class="param-val">20–30/min</span></div>
+        <div class="param-row"><span class="param-label">HR</span><span class="param-val">100–120 bpm</span></div>
+        <div class="param-row"><span class="param-label">Accessory muscles</span><span class="param-val">Usually yes</span></div>
+        <div class="param-row"><span class="param-label">Wheeze</span><span class="param-val">Loud, pan-exp ± insp</span></div>
+        <div class="param-row"><span class="param-label">SpO₂ (room air)</span><span class="param-val" style="color:#d29922">91–95%</span></div>
+        <div class="param-row"><span class="param-label">PEF</span><span class="param-val" style="color:#d29922">40–69% predicted/best</span></div>
+        <div class="param-row"><span class="param-label">PaO₂</span><span class="param-val">60–80 mmHg</span></div>
+        <div class="param-row"><span class="param-label">PaCO₂</span><span class="param-val">&lt;45 mmHg</span></div>
+      </div>
+    </div>
+
+    <div class="sev-block sev">
+      <div class="sev-block-head">🔴 SEVERE</div>
+      <div class="sev-block-body">
+        <div class="param-row"><span class="param-label">Dyspnea</span><span class="param-val">At rest, can't lie flat</span></div>
+        <div class="param-row"><span class="param-label">Speech</span><span class="param-val">Words only</span></div>
+        <div class="param-row"><span class="param-label">Alertness</span><span class="param-val">Agitated</span></div>
+        <div class="param-row"><span class="param-label">RR</span><span class="param-val">>30/min</span></div>
+        <div class="param-row"><span class="param-label">HR</span><span class="param-val">>120 bpm</span></div>
+        <div class="param-row"><span class="param-label">Accessory muscles</span><span class="param-val">Yes + paradox</span></div>
+        <div class="param-row"><span class="param-label">Wheeze</span><span class="param-val">Loud or absent</span></div>
+        <div class="param-row"><span class="param-label">SpO₂ (room air)</span><span class="param-val" style="color:#f85149">&lt;91%</span></div>
+        <div class="param-row"><span class="param-label">PEF</span><span class="param-val" style="color:#f85149">&lt;40% predicted/best</span></div>
+        <div class="param-row"><span class="param-label">PaO₂</span><span class="param-val">&lt;60 mmHg</span></div>
+        <div class="param-row"><span class="param-label">PaCO₂</span><span class="param-val" style="color:#f85149">≥45 → impending resp failure</span></div>
+      </div>
+    </div>
+
+    <div class="sev-block life">
+      <div class="sev-block-head">⚫ LIFE-THREATENING (Near-Fatal)</div>
+      <div class="sev-block-body">
+        <div class="param-row"><span class="param-label">Chest auscultation</span><span class="param-val" style="color:#bc8cff">Silent chest</span></div>
+        <div class="param-row"><span class="param-label">Cyanosis</span><span class="param-val" style="color:#bc8cff">Present</span></div>
+        <div class="param-row"><span class="param-label">Respiratory effort</span><span class="param-val" style="color:#bc8cff">Poor/absent</span></div>
+        <div class="param-row"><span class="param-label">HR</span><span class="param-val" style="color:#bc8cff">Bradycardia</span></div>
+        <div class="param-row"><span class="param-label">BP</span><span class="param-val" style="color:#bc8cff">Hypotension</span></div>
+        <div class="param-row"><span class="param-label">CNS</span><span class="param-val" style="color:#bc8cff">Confusion, coma</span></div>
+        <div class="param-row"><span class="param-label">SpO₂</span><span class="param-val" style="color:#bc8cff">&lt;92% on O₂</span></div>
+        <div class="param-row"><span class="param-label">PaCO₂</span><span class="param-val" style="color:#bc8cff">≥45 mmHg</span></div>
+        <div class="param-row"><span class="param-label">pH</span><span class="param-val" style="color:#bc8cff">Acidaemia</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">ABG Interpretation in Asthma</div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🩸</span>
+      <span class="card-title">ABG Patterns by Severity</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:8px">
+      <table class="table-w">
+        <tr><th>Stage</th><th>pH</th><th>PaCO₂</th><th>PaO₂</th><th>Interpretation</th></tr>
+        <tr><td><span class="tag tag-g">Early/Mild</span></td><td>↑ 7.45–7.55</td><td>↓ &lt;40</td><td>Normal</td><td style="color:var(--muted)">Resp alkalosis — hyperventilating</td></tr>
+        <tr><td><span class="tag tag-y">Moderate</span></td><td>Normal–↑</td><td>Normal 35–45</td><td>↓ 60–80</td><td style="color:var(--yellow)">⚠️ "Normal" CO₂ in tachypneic pt = fatigue warning</td></tr>
+        <tr><td><span class="tag tag-r">Severe</span></td><td>↓ &lt;7.35</td><td>↑ &gt;45</td><td>↓↓ &lt;60</td><td style="color:var(--red)">Resp acidosis — muscle fatigue, impending failure</td></tr>
+        <tr><td><span class="tag tag-p">Near-Fatal</span></td><td>↓↓</td><td>↑↑ &gt;60</td><td>↓↓↓</td><td style="color:var(--purple)">Acute ventilatory failure → intubate</td></tr>
+      </table>
+      <div class="warn-box red" style="margin-top:8px">
+        <span class="warn-icon">🚨</span>
+        <div><strong>Key clinical pearl:</strong> PaCO₂ of 45 in a patient who was hyperventilating = a RISE, not normal. Always interpret in clinical context of effort and RR.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">Investigations</div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🧪</span>
+      <span class="card-title">Workup — What to Order and When</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:8px">
+      <table class="table-w">
+        <tr><th>Investigation</th><th>Indication / Interpretation</th></tr>
+        <tr><td>SpO₂ monitoring</td><td>All patients — continuous, titrate O₂ to 93–95%</td></tr>
+        <tr><td>PEF</td><td>All adults who can cooperate — trend serial measurements</td></tr>
+        <tr><td>ABG</td><td>SpO₂ &lt;92%, severe/life-threatening, or not improving with Rx</td></tr>
+        <tr><td>CXR</td><td>First severe episode, suspected pneumothorax, pneumonia, or no improvement</td></tr>
+        <tr><td>ECG</td><td>HR >120, known cardiac disease, age >50, concern for PE</td></tr>
+        <tr><td>FBC</td><td>Suspected infection (fever, purulent sputum)</td></tr>
+        <tr><td>Electrolytes (K⁺, Mg²⁺)</td><td>If using high-dose salbutamol + IVMgSO₄. Salbutamol → hypokalemia. Monitor K⁺.</td></tr>
+        <tr><td>Serum lactate</td><td>High-dose salbutamol can cause lactic acidosis (β2-induced) — especially if considering intubation</td></tr>
+        <tr><td>CRP/PCT</td><td>Only if bacterial trigger suspected — most viral or non-infectious</td></tr>
+        <tr><td>Sputum MC&S</td><td>Only if purulent + not responding</td></tr>
+        <tr><td>D-dimer / CTPA</td><td>If PE in differential (Wells score)</td></tr>
+        <tr><td>Troponin, BNP</td><td>If cardiac asthma / APO differential</td></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════ ALGORITHM ═══════════════════════════ -->
+<div class="section" id="sec-algorithm">
+
+  <div class="sec-title">ED Management Algorithm (GINA 2024 / BTS 2023)</div>
+
+  <div class="flow-container">
+    <div class="flow-box start">🫁 Asthma Exacerbation Arrives in ER</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box start">IMMEDIATE: Brief history + SpO₂ + RR + PEF<br><small style="font-weight:400;color:#79c0ff">Check for near-fatal features first</small></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box decision">Near-fatal features present?<br><small style="font-weight:400;color:var(--yellow)">Silent chest / coma / bradycardia / SpO₂ &lt;92% on O₂</small></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-branch">
+      <div class="flow-branch-box">
+        <div class="flow-box action-r" style="font-size:11px">YES → ICU NOW<br>Prepare RSI<br>Call pulmo/intensivist</div>
+      </div>
+      <div class="flow-branch-box">
+        <div class="flow-box action-g" style="font-size:11px">NO → Classify severity<br>Mild / Moderate / Severe</div>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box start">IMMEDIATE TREATMENT (ALL)</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box action-g">🫁 O₂: Titrate to SpO₂ 93–95% (target, not "as much as possible")<br>SABA: Salbutamol nebulisation STAT</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box action-y">⏱ Reassess at 1 hour<br>Response = SpO₂, PEF, HR, RR, speech</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box decision">PEF ≥70% AND SpO₂ &gt;93% at 1 hr?</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-branch">
+      <div class="flow-branch-box">
+        <div class="flow-box action-g" style="font-size:11px">YES<br>Good response<br>→ Discharge planning</div>
+      </div>
+      <div class="flow-branch-box">
+        <div class="flow-box action-r" style="font-size:11px">NO<br>Escalate therapy<br>Add MgSO₄ IV ± Iprat</div>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box decision">PEF 40–69% OR not improving?</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box action-y">Admit ward + continue intensive Rx<br>Consider IV MgSO₄ bolus</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box decision">Worsening? PEF &lt;40%? SpO₂ falling?</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box action-p">ICU referral + NIV consideration<br>RSI preparation if deteriorating</div>
+  </div>
+
+  <div class="sec-title">Step-by-Step ED Protocol</div>
+
+  <div class="card open">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🟢</span>
+      <span class="card-title">MILD — Outpatient/Short Stay Track</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:10px">
+      <div class="algo-step"><div class="algo-num green">1</div><div class="algo-text">O₂ if SpO₂ &lt;93% — target 93–95%</div></div>
+      <div class="algo-step"><div class="algo-num green">2</div><div class="algo-text"><strong>Salbutamol</strong> 2.5 mg neb q20min × 3 in 1st hour (or 4–8 puffs MDI + spacer)</div></div>
+      <div class="algo-step"><div class="algo-num green">3</div><div class="algo-text"><strong>Prednisolone</strong> oral 1 mg/kg (max 50 mg) — give early, don't wait for reassessment</div></div>
+      <div class="algo-step"><div class="algo-num green">4</div><div class="algo-text">Reassess at 1 hour — PEF, SpO₂, HR, RR, dyspnea score</div></div>
+      <div class="algo-step"><div class="algo-num green">5</div><div class="algo-text">If PEF ≥70% and SpO₂ &gt;93%: discharge with written action plan, OCS 3–5 days, ICS initiated/continued</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🟡</span>
+      <span class="card-title">MODERATE — Observation/Admit Track</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:10px">
+      <div class="algo-step"><div class="algo-num yellow">1</div><div class="algo-text">O₂ titrate to SpO₂ 93–95%. Place IV access.</div></div>
+      <div class="algo-step"><div class="algo-num yellow">2</div><div class="algo-text"><strong>Salbutamol</strong> 2.5–5 mg neb q20min × 3 in 1st hour. May run continuous neb if not improving.</div></div>
+      <div class="algo-step"><div class="algo-num yellow">3</div><div class="algo-text"><strong>Ipratropium</strong> 0.5 mg neb q20min × 3 (first hour only — evidence only in first hour, no benefit beyond)</div></div>
+      <div class="algo-step"><div class="algo-num yellow">4</div><div class="algo-text"><strong>Prednisolone</strong> oral 1 mg/kg (max 50 mg) OR <strong>methylprednisolone</strong> IV 1 mg/kg if PO not tolerated</div></div>
+      <div class="algo-step"><div class="algo-num yellow">5</div><div class="algo-text">Reassess 1 hour: if PEF 40–69% or partial response → admit; if improving to &gt;70% → discharge track</div></div>
+      <div class="algo-step"><div class="algo-num yellow">6</div><div class="algo-text">If no clear improvement at 1 hr: <strong>IV MgSO₄</strong> 2 g over 20 min (single dose)</div></div>
+      <div class="warn-box blue">
+        <span class="warn-icon">💡</span>
+        <div>MDI + spacer = equivalent to nebuliser if patient can coordinate. Nebs preferred in severe/anxious patients and children &lt;5y.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔴</span>
+      <span class="card-title">SEVERE — High Dependency / ICU Prep Track</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:10px">
+      <div class="algo-step"><div class="algo-num red">1</div><div class="algo-text"><strong>O₂</strong> high-flow via NRM if SpO₂ &lt;90%, then titrate to 93–95%. Do NOT use high flow nasal as primary unless NIV set up.</div></div>
+      <div class="algo-step"><div class="algo-num red">2</div><div class="algo-text"><strong>Salbutamol</strong> 5 mg neb q15–20min or continuous (10 mg/hr neb). IV salbutamol if neb not feasible: 5 mcg/min → titrate.</div></div>
+      <div class="algo-step"><div class="algo-num red">3</div><div class="algo-text"><strong>Ipratropium</strong> 0.5 mg q20min × 3 in 1st hour combined with salbutamol</div></div>
+      <div class="algo-step"><div class="algo-num red">4</div><div class="algo-text"><strong>Methylprednisolone</strong> IV 1–2 mg/kg q6–8h</div></div>
+      <div class="algo-step"><div class="algo-num red">5</div><div class="algo-text"><strong>MgSO₄ IV</strong> 2 g over 20 min — single dose, proven benefit in severe/life-threatening</div></div>
+      <div class="algo-step"><div class="algo-num red">6</div><div class="algo-text">ECG, ABG, monitor K⁺ (salbutamol → hypokalemia), consider KCl if K⁺ &lt;3.5</div></div>
+      <div class="algo-step"><div class="algo-num red">7</div><div class="algo-text">Alert ICU / pulmonologist. NIV (CPAP/BiPAP) may bridge to avoid intubation.</div></div>
+      <div class="algo-step"><div class="algo-num red">8</div><div class="algo-text">If deteriorating: <strong>prepare for RSI</strong> — see ICU/NIV tab for intubation specifics.</div></div>
+      <div class="warn-box red">
+        <span class="warn-icon">🚨</span>
+        <div>IV aminophylline: <strong>NOT first-line</strong> in current GINA/BTS guidelines. Consider only in specialist-supervised severe cases with no response to above. Narrow TI, arrhythmias, vomiting risk.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════ DRUGS ═══════════════════════════ -->
+<div class="section" id="sec-drugs">
+
+  <div class="sec-title">1st Line — Bronchodilators</div>
+
+  <div class="drug-block">
+    <div class="drug-name">Salbutamol (Albuterol) <span class="tag tag-g">SABA</span> <span class="tag tag-b">1st Line</span></div>
+    <div class="drug-brand">🇮🇩 Ventolin® neb 2.5 mg/2.5 mL, Asmalin®, Lasal®</div>
+    <div class="drug-info">
+      <b>Nebulisation:</b><br>
+      <span class="drug-dose">Mild–Mod: 2.5 mg neb q20min × 3 (1st hour)</span><br>
+      <span class="drug-dose">Severe: 5 mg neb q15–20min / continuous 10 mg/hr</span><br><br>
+      <b>MDI + spacer:</b> <span class="drug-dose">4–8 puffs (100 mcg/puff) q20min × 3</span><br><br>
+      <b>IV (if neb not possible — severe):</b><br>
+      <span class="drug-dose">Loading: 15 mcg/kg IV over 10 min</span><br>
+      <span class="drug-dose">Maintenance: 0.1–0.2 mcg/kg/min, titrate to response</span><br>
+      <i>Alt: 5 mcg/min → 10 → 20 mcg/min if needed</i>
+    </div>
+    <div class="drug-note">⚠️ Monitor K⁺ (hypokalemia), HR (tachycardia), tremor. Lactic acidosis possible at high doses. IV form (Salbutamol inj) often needs dilution — check ampoule (0.5 mg/mL or 1 mg/mL depending on brand).</div>
+  </div>
+
+  <div class="drug-block">
+    <div class="drug-name">Ipratropium Bromide <span class="tag tag-y">SAMA</span></div>
+    <div class="drug-brand">🇮🇩 Atrovent® 0.25 mg/mL (2 mL = 0.5 mg), Ipravent®</div>
+    <div class="drug-info">
+      <span class="drug-dose">0.5 mg neb, combined with salbutamol neb, q20min × 3 (1st hour only)</span>
+    </div>
+    <div class="drug-note">Evidence supports use ONLY in 1st hour — reduces hospitalisation in severe acute asthma. No benefit if started later. Mix with salbutamol in same neb cup.</div>
+  </div>
+
+  <div class="sec-title">2nd Line — Systemic Bronchodilators</div>
+
+  <div class="drug-block">
+    <div class="drug-name">Magnesium Sulfate IV <span class="tag tag-r">Severe/Life-Threatening</span></div>
+    <div class="drug-brand">🇮🇩 MgSO₄ 20% (2 g/10 mL) amp, 40% (4 g/10 mL) amp</div>
+    <div class="drug-info">
+      <span class="drug-dose">2 g IV over 20 min (single dose)</span><br>
+      Dilute: 2 g MgSO₄ 40% (5 mL) + NaCl 0.9% ad 100 mL → infuse over 20 min
+    </div>
+    <div class="drug-note">✅ Good evidence in severe/life-threatening asthma — reduces need for intubation. Mechanism: smooth muscle relaxation via Ca²⁺ antagonism. Monitor: BP drop, flushing. Avoid if renal failure. Check serum Mg if repeated dosing.</div>
+  </div>
+
+  <div class="drug-block">
+    <div class="drug-name">Aminophylline IV <span class="tag tag-y">Adjunct — Expert Use</span></div>
+    <div class="drug-brand">🇮🇩 Aminofilin® 24 mg/mL amp (10 mL = 240 mg)</div>
+    <div class="drug-info">
+      <span class="drug-dose">Loading: 5 mg/kg IV over 30 min (if not on theophylline)</span><br>
+      <span class="drug-dose">Maintenance: 0.5–0.7 mg/kg/hr</span><br>
+      Target serum level: 10–20 mcg/mL
+    </div>
+    <div class="drug-note">⚠️ NOT recommended as routine first-line by GINA 2024/BTS 2023. Reserve for specialist-supervised refractory severe cases. Narrow TI: arrhythmias, seizures, vomiting. Reduce dose in elderly, liver disease, cardiac failure, CYP1A2 inhibitors (ciprofloxacin, erythromycin).</div>
+  </div>
+
+  <div class="drug-block">
+    <div class="drug-name">Epinephrine (Adrenaline) <span class="tag tag-r">Anaphylaxis Overlap</span></div>
+    <div class="drug-brand">🇮🇩 Adrenalin® 1 mg/mL amp</div>
+    <div class="drug-info">
+      <span class="drug-dose">IM 0.3–0.5 mg (0.3–0.5 mL of 1:1000) lateral thigh</span><br>
+      Repeat q5–15 min if needed (anaphylaxis/severe bronchospasm not responding)
+    </div>
+    <div class="drug-note">Use if anaphylaxis component, or life-threatening bronchospasm not responding to salbutamol. Not routine for asthma alone unless anaphylaxis overlap or failed standard therapy.</div>
+  </div>
+
+  <div class="sec-title">Corticosteroids</div>
+
+  <div class="drug-block">
+    <div class="drug-name">Methylprednisolone IV <span class="tag tag-b">Systemic CS</span></div>
+    <div class="drug-brand">🇮🇩 Medrol® inj, Urbason® 125 mg vial, Solu-Cortef® (hydrocortisone)</div>
+    <div class="drug-info">
+      <b>IV (severe/mod-severe, cannot take PO):</b><br>
+      <span class="drug-dose">1–2 mg/kg IV q6–8h (max ~125 mg/dose)</span><br><br>
+      <b>Hydrocortisone alt:</b><br>
+      <span class="drug-dose">200 mg IV stat then 100 mg q6h</span>
+    </div>
+    <div class="drug-note">No difference IV vs PO if absorption intact — prefer PO to reduce complications. Onset 4–6 hrs (anti-inflammatory). Give EARLY — do not delay for reassessment.</div>
+  </div>
+
+  <div class="drug-block">
+    <div class="drug-name">Prednisolone Oral <span class="tag tag-g">Mild–Moderate</span></div>
+    <div class="drug-brand">🇮🇩 Prednisolone 5 mg tab, Pehacort®, Medrol® 4 mg tab (methylprednisolone)</div>
+    <div class="drug-info">
+      <b>Acute:</b> <span class="drug-dose">1 mg/kg/day PO (max 50 mg) for 3–5 days</span><br>
+      <b>Discharge course:</b> <span class="drug-dose">Prednisolone 40 mg OD × 5–7 days (adults)</span>
+    </div>
+    <div class="drug-note">Equivalent to IV if PO tolerated. Taper NOT needed for courses &lt;14 days. Start ICS simultaneously on discharge.</div>
+  </div>
+
+  <div class="sec-title">Adjuncts & Special Situations</div>
+
+  <div class="drug-block">
+    <div class="drug-name">Heliox <span class="tag tag-p">Adjunct</span></div>
+    <div class="drug-info">70:30 or 80:20 He:O₂ mixture. Reduces turbulent flow in narrowed airways. Evidence is weak — may be considered as bridge in severe asthma while awaiting intubation setup. Not available in most Indonesian RS.</div>
+  </div>
+
+  <div class="drug-block">
+    <div class="drug-name">Ketamine IV <span class="tag tag-r">Pre-intubation</span></div>
+    <div class="drug-brand">🇮🇩 Ketalar® 10/50 mg/mL</div>
+    <div class="drug-info">
+      <span class="drug-dose">Procedural/RSI induction: 1–2 mg/kg IV</span><br>
+      Bronchodilatory + sedative. Preferred induction agent for asthma RSI.
+    </div>
+    <div class="drug-note">Dissociative anaesthesia. Increases secretions — give atropine 0.01 mg/kg preemptively. Maintains airway reflexes and bronchodilation. Excellent choice for status asthmaticus before intubation.</div>
+  </div>
+
+  <div class="drug-block">
+    <div class="drug-name">Antibiotics <span class="tag tag-y">Only if indicated</span></div>
+    <div class="drug-info">DO NOT give routinely. Most exacerbations triggered by viral URTIs or allergens. Use only if: fever >38.5°C + purulent sputum + CXR consolidation (bacterial pneumonia complicating asthma). No empirical antibiotics for simple asthma exacerbation.</div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════ ICU / NIV ═══════════════════════════ -->
+<div class="section" id="sec-icu">
+
+  <div class="warn-box red">
+    <span class="warn-icon">🚨</span>
+    <div><strong>Intubation in asthma is HIGH RISK</strong> — avoid if possible. Even post-intubation, dynamic hyperinflation, auto-PEEP, and haemodynamic collapse are major hazards. Exhaust NIV and aggressive medical therapy first.</div>
+  </div>
+
+  <div class="sec-title">NIV in Acute Asthma</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💨</span>
+      <span class="card-title">Non-Invasive Ventilation (NIV) — BiPAP/CPAP</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:10px">
+      <div class="warn-box yellow">
+        <span class="warn-icon">⚠️</span>
+        <div><strong>Evidence:</strong> NIV in asthma has weaker evidence than COPD. Use as a bridge to avoid intubation, NOT as definitive therapy without concurrent aggressive medical Rx.</div>
+      </div>
+      <div style="margin-top:8px">
+        <div class="param-row"><span class="param-label">Mode</span><span class="param-val">BiPAP preferred (IPAP/EPAP)</span></div>
+        <div class="param-row"><span class="param-label">IPAP initial</span><span class="param-val">8–12 cmH₂O (titrate to resp effort)</span></div>
+        <div class="param-row"><span class="param-label">EPAP</span><span class="param-val">3–5 cmH₂O (low — avoid worsening hyperinflation)</span></div>
+        <div class="param-row"><span class="param-label">FiO₂</span><span class="param-val">Titrate to SpO₂ 93–95%</span></div>
+        <div class="param-row"><span class="param-label">Target</span><span class="param-val">↓ RR, ↓ WOB, improve SpO₂, buy time</span></div>
+      </div>
+      <div class="warn-box red" style="margin-top:8px">
+        <span class="warn-icon">🚫</span>
+        <div><strong>Absolute contraindications:</strong> Coma/uncooperative, vomiting, unable to protect airway, haemodynamic instability → proceed to RSI.</div>
+      </div>
+      <div class="drug-note" style="margin-top:6px">Can deliver nebulisation through NIV mask — use in-line neb adaptor. Continue SABA/ipratropium neb through mask.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🔴</span>
+      <span class="card-title">Indications for Intubation (RSI)</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:10px">
+      <div class="param-row"><span class="param-label">Respiratory arrest</span><span class="param-val" style="color:#f85149">Absolute</span></div>
+      <div class="param-row"><span class="param-label">Cardiac arrest</span><span class="param-val" style="color:#f85149">Absolute</span></div>
+      <div class="param-row"><span class="param-label">Coma / GCS ≤8</span><span class="param-val" style="color:#f85149">Absolute</span></div>
+      <div class="param-row"><span class="param-label">Progressive hypercapnia (PaCO₂ >55 + acidaemia) despite Rx</span><span class="param-val" style="color:#f85149">Strong</span></div>
+      <div class="param-row"><span class="param-label">Haemodynamic collapse unresponsive to fluid</span><span class="param-val" style="color:#f85149">Strong</span></div>
+      <div class="param-row"><span class="param-label">Silent chest + no improvement after 30 min aggressive Rx</span><span class="param-val" style="color:#d29922">Consider</span></div>
+      <div class="param-row"><span class="param-label">Patient exhaustion (↑ CO₂, ↓ RR, paradoxical breathing)</span><span class="param-val" style="color:#d29922">Consider</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💉</span>
+      <span class="card-title">RSI Protocol for Status Asthmaticus</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:10px">
+      <div class="algo-step"><div class="algo-num red">1</div><div class="algo-text"><strong>Pre-oxygenate</strong> — NRM 15 L/min × 3–5 min. BVM ventilation only if apnoea (risk of ↑ air trapping with BVM).</div></div>
+      <div class="algo-step"><div class="algo-num red">2</div><div class="algo-text"><strong>Premedication:</strong> Atropine 0.01 mg/kg IV (reduce secretions if using ketamine). Lidocaine 1.5 mg/kg IV 3 min before — may attenuate bronchospasm triggered by laryngoscopy (controversial but low risk).</div></div>
+      <div class="algo-step"><div class="algo-num red">3</div><div class="algo-text">
+        <strong>Induction agent:</strong><br>
+        <span class="drug-dose">Ketamine 1.5–2 mg/kg IV</span> ← <strong>Preferred</strong> (bronchodilator + dissociative)<br>
+        Alt: <span class="drug-dose">Propofol 1.5–2 mg/kg IV</span> (also mild bronchodilator, but may drop BP)
+      </div></div>
+      <div class="algo-step"><div class="algo-num red">4</div><div class="algo-text">
+        <strong>Neuromuscular blockade:</strong><br>
+        <span class="drug-dose">Succinylcholine 1.5 mg/kg IV</span> (fast offset — useful if difficult intubation anticipated)<br>
+        Alt: <span class="drug-dose">Rocuronium 1.2 mg/kg IV</span> (reversible with sugammadex 16 mg/kg)<br>
+        ⚠️ Succinylcholine: avoid if hyperkalemia risk, burns, crush &gt;48h
+      </div></div>
+      <div class="algo-step"><div class="algo-num red">5</div><div class="algo-text">Use <strong>largest ETT possible</strong> (≥8.0 mm adult) — reduces resistance.</div></div>
+      <div class="algo-step"><div class="algo-num red">6</div><div class="algo-text">Confirm tube with ETCO₂ + bilateral breath sounds.</div></div>
+
+      <div class="warn-box purple" style="margin-top:8px">
+        <span class="warn-icon">🔧</span>
+        <div><strong>Post-intubation ventilator strategy:</strong><br>
+        Low RR (8–12/min) · Low Vt (6–8 mL/kg IBW) · Longer I:E ratio (1:3 to 1:5) · Low PEEP (0–5) · Permissive hypercapnia OK (target pH &gt;7.20) · Tolerate high PIP if plateau Pplat &lt;30 cmH₂O. Target: allow full exhalation.</div>
+      </div>
+
+      <div class="warn-box red" style="margin-top:6px">
+        <span class="warn-icon">💥</span>
+        <div><strong>Haemodynamic collapse post-intubation:</strong> Think auto-PEEP / tension hyperinflation. Disconnect ET tube from vent for 30–60 sec (decompress). Rule out pneumothorax bilaterally.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">Refractory Status Asthmaticus</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>⚗️</span>
+      <span class="card-title">ICU Escalation — Refractory Asthma</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:10px">
+      <table class="table-w">
+        <tr><th>Option</th><th>Dose / Details</th><th>Notes</th></tr>
+        <tr><td>IV Salbutamol infusion</td><td>0.1–0.2 mcg/kg/min, titrate</td><td>Continuous cardiac monitoring, K⁺ q4h</td></tr>
+        <tr><td>IV Aminophylline</td><td>5 mg/kg load over 30 min → 0.5 mg/kg/hr</td><td>TDM targeting 10–20 mcg/mL</td></tr>
+        <tr><td>IV Ketamine infusion</td><td>0.1–0.5 mg/kg/hr</td><td>Adjunct sedation + bronchodilation</td></tr>
+        <tr><td>Inhaled volatile (Sevoflurane)</td><td>Via AnaConDa system on ICU vent</td><td>Potent bronchodilator, specialist only</td></tr>
+        <tr><td>ECMO (VV)</td><td>Last resort, tertiary centre</td><td>Bridge to resolution; rare indication</td></tr>
+        <tr><td>Bronchoscopy + lavage</td><td>Remove mucus plugs</td><td>Significant risk in acute severe asthma — expert only</td></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════ DISCHARGE ═══════════════════════════ -->
+<div class="section" id="sec-discharge">
+
+  <div class="sec-title">Discharge Criteria</div>
+
+  <div id="dcChecklist">
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span>✅</span>
+        <span class="card-title">Discharge Readiness Checklist</span>
+        <span class="card-arrow">▼</span>
+      </div>
+      <div class="card-body" style="padding-top:6px">
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">PEF ≥70% predicted or personal best</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">SpO₂ ≥93% on room air</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Symptoms stable — minimal dyspnea, can speak full sentences</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Maintained for ≥1 hour after last bronchodilator dose</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Oral corticosteroid course prescribed (5–7 days)</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">ICS initiated or existing prescription confirmed/stepped up</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Patient can use MDI/inhaler correctly (demonstrated)</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Written asthma action plan given</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Follow-up appointment within 2–7 days scheduled</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Triggers discussed and documented</div>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <div class="check-label">Smoking cessation counselled (if applicable)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">Admission Criteria</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>🏥</span>
+      <span class="card-title">When to Admit</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:10px">
+      <table class="table-w">
+        <tr><th>Criterion</th><th>Disposition</th></tr>
+        <tr><td>PEF &lt;40% after 1 hr Rx, or &lt;70% at 4 hrs</td><td><span class="tag tag-r">Admit ward</span></td></tr>
+        <tr><td>SpO₂ &lt;93% despite O₂</td><td><span class="tag tag-r">Admit</span></td></tr>
+        <tr><td>Severe exacerbation (any near-fatal feature)</td><td><span class="tag tag-p">ICU/HDU</span></td></tr>
+        <tr><td>Prior intubation / multiple admissions</td><td><span class="tag tag-p">Consider ICU</span></td></tr>
+        <tr><td>Lives alone, cannot self-manage, poor access to care</td><td><span class="tag tag-r">Admit</span></td></tr>
+        <tr><td>Nocturnal symptoms or early morning dip</td><td><span class="tag tag-y">Consider admit</span></td></tr>
+        <tr><td>Unable to take PO medications</td><td><span class="tag tag-r">Admit</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="sec-title">Discharge Medications</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>💊</span>
+      <span class="card-title">Medications on Discharge</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:10px">
+
+      <div class="dc-section">
+        <div class="dc-title">1. Short Course OCS</div>
+        <div class="drug-info">
+          <span class="drug-dose">Prednisolone 40 mg PO OD × 5–7 days (adults)</span><br>
+          <span class="drug-dose">Children: 1 mg/kg/day max 40 mg × 3–5 days</span><br>
+          No taper needed for short courses. Start immediately on discharge.
+        </div>
+      </div>
+
+      <div class="dc-section">
+        <div class="dc-title">2. Inhaled Corticosteroid (ICS) — Controller</div>
+        <div class="drug-info">
+          Start or step up if not already on ICS. GINA emphasises: <strong>all adults with asthma should be on ICS</strong> — SABA alone is no longer standard.<br>
+          Options (🇮🇩 available):<br>
+          <span class="drug-dose">Budesonide 200–400 mcg BID (Pulmicort®, Budecort®)</span><br>
+          <span class="drug-dose">Fluticasone 100–250 mcg BID (Flixotide®)</span><br>
+          <span class="drug-dose">Beclomethasone 200–400 mcg BID (Beclovent®)</span>
+        </div>
+      </div>
+
+      <div class="dc-section">
+        <div class="dc-title">3. SABA Reliever</div>
+        <div class="drug-info">
+          <span class="drug-dose">Salbutamol MDI 100 mcg/puff — 2 puffs PRN (max 4×/day)</span><br>
+          <b>GINA 2024 update:</b> Preferred reliever = ICS-formoterol (MART) for mild-moderate persistent asthma (Steps 2–4). If only SABA used as reliever, explicitly counsel to not overuse.
+        </div>
+      </div>
+
+      <div class="dc-section">
+        <div class="dc-title">4. ICS-LABA (if Step 3–4 asthma)</div>
+        <div class="drug-info">
+          <span class="drug-dose">Budesonide/Formoterol 160/4.5 mcg (Symbicort® Turbuhaler®) — MART strategy</span><br>
+          <span class="drug-dose">Fluticasone/Salmeterol 250/50 mcg BID (Seretide®)</span><br>
+          <span class="drug-dose">Fluticasone/Formoterol (Flutiform®)</span>
+        </div>
+      </div>
+
+      <div class="warn-box blue" style="margin-top:4px">
+        <span class="warn-icon">📋</span>
+        <div><strong>GINA 2024 key change:</strong> SABA-only therapy is no longer recommended at any step. All asthma patients should have anti-inflammatory therapy. Even mild intermittent asthma should have low-dose ICS or ICS-formoterol as reliever.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">Follow-Up Plan</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span>📅</span>
+      <span class="card-title">Post-ER Follow-Up Framework</span>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body" style="padding-top:10px">
+      <div class="param-row"><span class="param-label">2–7 days post-discharge</span><span class="param-val">GP/puskesmas: OCS completion, symptoms check</span></div>
+      <div class="param-row"><span class="param-label">4 weeks</span><span class="param-val">Pulmonologist: spirometry, GINA step assessment, adherence</span></div>
+      <div class="param-row"><span class="param-label">3 months</span><span class="param-val">Full review: ACT score, controller step-up/down, allergen Hx</span></div>
+      <div class="param-row"><span class="param-label">Allergy referral</span><span class="param-val">If allergen trigger suspected, consider RAST/skin prick, immunotherapy</span></div>
+      <div class="param-row"><span class="param-label">Difficult asthma</span><span class="param-val">Referral to severe asthma MDT — consider biologics (omalizumab, mepolizumab, dupilumab)</span></div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════ CALCULATORS ═══════════════════════════ -->
+<div class="section" id="sec-calc">
+
+  <div class="sec-title">Asthma Severity Score (PRAM adapted for adults)</div>
+
+  <div class="calc-box">
+    <div class="calc-title">📊 Clinical Severity Score</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Tap to select score for each parameter</div>
+
+    <div class="score-row">
+      <span class="score-label">SpO₂ (room air)</span>
+      <div class="score-opts">
+        <button class="score-opt" data-cat="spo2" data-val="0" onclick="selectScore(this)">≥95% (0)</button>
+        <button class="score-opt" data-cat="spo2" data-val="1" onclick="selectScore(this)">92–94% (1)</button>
+        <button class="score-opt" data-cat="spo2" data-val="2" onclick="selectScore(this)">&lt;92% (2)</button>
+      </div>
+    </div>
+    <div class="score-row">
+      <span class="score-label">Wheeze</span>
+      <div class="score-opts">
+        <button class="score-opt" data-cat="wheeze" data-val="0" onclick="selectScore(this)">None (0)</button>
+        <button class="score-opt" data-cat="wheeze" data-val="1" onclick="selectScore(this)">End-exp (1)</button>
+        <button class="score-opt" data-cat="wheeze" data-val="2" onclick="selectScore(this)">Pan-exp (2)</button>
+        <button class="score-opt" data-cat="wheeze" data-val="3" onclick="selectScore(this)">Silent (3)</button>
+      </div>
+    </div>
+    <div class="score-row">
+      <span class="score-label">Accessory muscles</span>
+      <div class="score-opts">
+        <button class="score-opt" data-cat="muscle" data-val="0" onclick="selectScore(this)">None (0)</button>
+        <button class="score-opt" data-cat="muscle" data-val="1" onclick="selectScore(this)">Mild (1)</button>
+        <button class="score-opt" data-cat="muscle" data-val="2" onclick="selectScore(this)">Mod (2)</button>
+        <button class="score-opt" data-cat="muscle" data-val="3" onclick="selectScore(this)">Severe (3)</button>
+      </div>
+    </div>
+    <div class="score-row">
+      <span class="score-label">Air entry</span>
+      <div class="score-opts">
+        <button class="score-opt" data-cat="entry" data-val="0" onclick="selectScore(this)">Normal (0)</button>
+        <button class="score-opt" data-cat="entry" data-val="1" onclick="selectScore(this)">↓ moderate (1)</button>
+        <button class="score-opt" data-cat="entry" data-val="2" onclick="selectScore(this)">Absent/↓↓ (2)</button>
+      </div>
+    </div>
+    <div class="score-row">
+      <span class="score-label">Suprasternal/paradox</span>
+      <div class="score-opts">
+        <button class="score-opt" data-cat="retract" data-val="0" onclick="selectScore(this)">No (0)</button>
+        <button class="score-opt" data-cat="retract" data-val="2" onclick="selectScore(this)">Yes (2)</button>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calcScore()" style="margin-top:10px;width:100%">Calculate Score</button>
+
+    <div class="calc-result" id="score-result">
+      <div class="calc-result-line"><span class="calc-result-key">Total Score</span><span class="calc-result-val" id="score-val">—</span></div>
+      <div class="calc-result-line"><span class="calc-result-key">Severity</span><span class="calc-result-val" id="score-sev">—</span></div>
+      <div class="calc-result-line"><span class="calc-result-key">Recommendation</span><span class="calc-result-val" id="score-rec" style="font-size:11px;text-align:right;max-width:200px">—</span></div>
+    </div>
+  </div>
+
+  <div class="sec-title">MgSO₄ Infusion Calculator</div>
+
+  <div class="calc-box">
+    <div class="calc-title">🧲 MgSO₄ IV Infusion</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Select concentration, then enter your volumes manually</div>
+
+    <!-- Concentration toggle -->
+    <div style="margin-bottom:12px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600">Concentration</div>
+      <div style="display:flex;gap:6px">
+        <button id="mg-conc-40" class="score-opt sel" onclick="selectMgConc(40)" style="flex:1;padding:7px 0;font-size:12px">40% (0.4 g/mL)</button>
+        <button id="mg-conc-20" class="score-opt" onclick="selectMgConc(20)" style="flex:1;padding:7px 0;font-size:12px">20% (0.2 g/mL)</button>
+      </div>
+      <div id="mg-conc-hint" style="margin-top:6px;font-size:11px;color:var(--muted)">Ampoule: 40% → 10 mL amp = 4 g · 25 mL amp = 10 g</div>
+    </div>
+
+    <!-- MgSO4 volume input -->
+    <div class="calc-row">
+      <span class="calc-label">MgSO₄ volume</span>
+      <input type="number" id="mg-vol" class="calc-input" placeholder="mL" min="0.1" max="100" step="0.1" oninput="updateMgPreview()">
+      <span class="calc-unit">mL</span>
+    </div>
+    <!-- Live dose preview -->
+    <div id="mg-dose-preview" style="font-size:11px;color:var(--accent2);margin:-4px 0 8px 88px;min-height:16px"></div>
+
+    <!-- Diluent volume input -->
+    <div class="calc-row">
+      <span class="calc-label">Diluent volume</span>
+      <input type="number" id="mg-dil" class="calc-input" placeholder="mL" min="1" max="500" oninput="updateMgPreview()">
+      <span class="calc-unit">mL</span>
+    </div>
+    <!-- Diluent type -->
+    <div class="calc-row" style="margin-top:-4px">
+      <span class="calc-label">Diluent type</span>
+      <select id="mg-diltype" class="calc-input" style="width:130px;font-family:'DM Sans',sans-serif;font-size:12px">
+        <option>NaCl 0.9%</option>
+        <option>D5W</option>
+        <option>RL</option>
+        <option>D5 ½NS</option>
+      </select>
+    </div>
+
+    <!-- Infusion duration -->
+    <div class="calc-row">
+      <span class="calc-label">Infuse over</span>
+      <input type="number" id="mg-dur" class="calc-input" placeholder="min" value="20" min="1" max="240">
+      <span class="calc-unit">min</span>
+    </div>
+
+    <button class="calc-btn" onclick="calcMg()" style="width:100%;margin-top:8px">Calculate</button>
+
+    <div class="calc-result" id="mg-result">
+      <div class="calc-result-line"><span class="calc-result-key">MgSO₄ drawn</span><span class="calc-result-val" id="mg-draw">—</span></div>
+      <div class="calc-result-line"><span class="calc-result-key">MgSO₄ dose</span><span class="calc-result-val" id="mg-gdose">—</span></div>
+      <div class="calc-result-line"><span class="calc-result-key">Diluent added</span><span class="calc-result-val" id="mg-dilout">—</span></div>
+      <div class="calc-result-line"><span class="calc-result-key">Total bag volume</span><span class="calc-result-val" id="mg-totvol">—</span></div>
+      <div class="calc-result-line"><span class="calc-result-key">Infusion duration</span><span class="calc-result-val" id="mg-durout">—</span></div>
+      <div class="calc-result-line" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px">
+        <span class="calc-result-key">Rate (mL/hr)</span>
+        <span class="calc-result-val" id="mg-rate" style="color:#3fb950">—</span>
+      </div>
+      <div class="calc-result-line">
+        <span class="calc-result-key">Macro drip rate (20 gtt/mL)</span>
+        <span class="calc-result-val" id="mg-drip">—</span>
+      </div>
+      <div id="mg-warn" class="warn-box" style="display:none;margin-top:8px"></div>
+    </div>
+  </div>
+
+  <div class="sec-title">Salbutamol Neb Dose Checker</div>
+
+  <div class="calc-box">
+    <div class="calc-title">💨 Salbutamol Nebulisation</div>
+    <div class="calc-row">
+      <span class="calc-label">Weight</span>
+      <input type="number" id="salbwt" class="calc-input" placeholder="kg" min="5" max="150">
+      <span class="calc-unit">kg</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">Age</span>
+      <select id="salbage" class="calc-input" style="width:110px;font-family:'DM Sans',sans-serif;font-size:12px">
+        <option value="adult">Adult (≥12y)</option>
+        <option value="child">Child (2–11y)</option>
+      </select>
+    </div>
+    <button class="calc-btn" onclick="calcSalb()">Calculate</button>
+    <div class="calc-result" id="salb-result">
+      <div class="calc-result-line"><span class="calc-result-key">Dose per neb</span><span class="calc-result-val" id="salb-dose">—</span></div>
+      <div class="calc-result-line"><span class="calc-result-key">Ventolin® 2.5 mg/2.5 mL</span><span class="calc-result-val" id="salb-vol">—</span></div>
+      <div class="calc-result-line"><span class="calc-result-key">Frequency (acute)</span><span class="calc-result-val" id="salb-freq">—</span></div>
+    </div>
+  </div>
+
+  <div class="sec-title">PEF % Predicted (Simplified)</div>
+
+  <div class="calc-box">
+    <div class="calc-title">📏 PEF Interpretation</div>
+    <div class="calc-row">
+      <span class="calc-label">Measured PEF</span>
+      <input type="number" id="pef-meas" class="calc-input" placeholder="L/min">
+      <span class="calc-unit">L/min</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">Best/Predicted</span>
+      <input type="number" id="pef-pred" class="calc-input" placeholder="L/min">
+      <span class="calc-unit">L/min</span>
+    </div>
+    <button class="calc-btn" onclick="calcPef()">Calculate</button>
+    <div class="calc-result" id="pef-result">
+      <div class="calc-result-line"><span class="calc-result-key">% Predicted/Best</span><span class="calc-result-val" id="pef-pct">—</span></div>
+      <div class="calc-result-line"><span class="calc-result-key">Severity Zone</span><span class="calc-result-val" id="pef-zone">—</span></div>
+      <div class="calc-result-line"><span class="calc-result-key">Recommendation</span><span class="calc-result-val" id="pef-rec" style="font-size:11px;text-align:right;max-width:200px">—</span></div>
+    </div>
+  </div>
+
+  <div class="sec-title">O₂ Target Reminder</div>
+  <div class="warn-box yellow">
+    <span class="warn-icon">🎯</span>
+    <div><strong>Target SpO₂: 93–95%</strong> (adults), not 100%. High-flow O₂ not better than titrated O₂ and may worsen V/Q mismatch. Children: 94–98%.</div>
+  </div>
+
+</div>
+
+</div><!-- /main -->
+
+<script>
+function showTab(tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function toggleCard(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+function toggleCheck(item) {
+  item.classList.toggle('checked');
+}
+
+// Severity Score
+const scoreVals = {};
+function selectScore(btn) {
+  const cat = btn.dataset.cat;
+  document.querySelectorAll(`[data-cat="${cat}"]`).forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  scoreVals[cat] = parseInt(btn.dataset.val);
+}
+
+function calcScore() {
+  const cats = ['spo2','wheeze','muscle','entry','retract'];
+  let total = 0, missing = false;
+  cats.forEach(c => {
+    if(scoreVals[c] === undefined) missing = true;
+    else total += scoreVals[c];
+  });
+  if(missing) { alert('Please select all parameters'); return; }
+  
+  let sev, rec, color;
+  if(total <= 3) { sev = '🟢 Mild'; rec = 'Consider discharge after Rx + reassessment'; color = '#3fb950'; }
+  else if(total <= 7) { sev = '🟡 Moderate'; rec = 'Intensive ED treatment, observe, likely admit'; color = '#d29922'; }
+  else { sev = '🔴 Severe / Life-Threatening'; rec = 'Admit HDU/ICU, escalate Rx, consider NIV/RSI'; color = '#f85149'; }
+  
+  document.getElementById('score-val').textContent = total + '/12';
+  document.getElementById('score-val').style.color = color;
+  document.getElementById('score-sev').textContent = sev;
+  document.getElementById('score-sev').style.color = color;
+  document.getElementById('score-rec').textContent = rec;
+  document.getElementById('score-result').classList.add('show');
+}
+
+// MgSO4 Calc
+let mgConc = 40;
+function selectMgConc(val) {
+  mgConc = val;
+  document.getElementById('mg-conc-40').classList.toggle('sel', val === 40);
+  document.getElementById('mg-conc-20').classList.toggle('sel', val === 20);
+  const hints = {
+    40: 'Ampoule: 40% → 10 mL amp = 4 g · 25 mL amp = 10 g',
+    20: 'Ampoule: 20% → 10 mL amp = 2 g · 20 mL amp = 4 g'
+  };
+  document.getElementById('mg-conc-hint').textContent = hints[val];
+  updateMgPreview();
+}
+
+function updateMgPreview() {
+  const vol = parseFloat(document.getElementById('mg-vol').value);
+  const preview = document.getElementById('mg-dose-preview');
+  if (!vol || vol <= 0) { preview.textContent = ''; return; }
+  const grams = (mgConc / 100) * vol;
+  preview.textContent = '= ' + grams.toFixed(2) + ' g MgSO₄';
+}
+
+function calcMg() {
+  const vol = parseFloat(document.getElementById('mg-vol').value);
+  const dil = parseFloat(document.getElementById('mg-dil').value);
+  const dur = parseFloat(document.getElementById('mg-dur').value);
+  const diltype = document.getElementById('mg-diltype').value;
+
+  if (!vol || vol <= 0) { alert('Enter MgSO₄ volume'); return; }
+  if (!dil || dil <= 0) { alert('Enter diluent volume'); return; }
+  if (!dur || dur <= 0) { alert('Enter infusion duration'); return; }
+
+  const grams = (mgConc / 100) * vol;
+  const totalVol = vol + dil;
+  const rateMlHr = (totalVol / dur) * 60;
+  const dripRate = Math.round(rateMlHr / 3); // macro 20 gtt/mL → gtt/min = mL/hr ÷ 3
+
+  document.getElementById('mg-draw').textContent = vol.toFixed(1) + ' mL of MgSO₄ ' + mgConc + '%';
+  document.getElementById('mg-gdose').textContent = grams.toFixed(2) + ' g';
+  document.getElementById('mg-dilout').textContent = dil.toFixed(0) + ' mL ' + diltype;
+  document.getElementById('mg-totvol').textContent = totalVol.toFixed(1) + ' mL';
+  document.getElementById('mg-durout').textContent = dur + ' min';
+  document.getElementById('mg-rate').textContent = rateMlHr.toFixed(0) + ' mL/hr';
+  document.getElementById('mg-drip').textContent = dripRate + ' gtt/min';
+
+  // Clinical warnings
+  const warnEl = document.getElementById('mg-warn');
+  let warnings = [];
+  if (grams < 1.5) warnings.push('⚠️ Dose <1.5 g — below typical therapeutic range for asthma (2 g recommended).');
+  if (grams > 3) warnings.push('⚠️ Dose >3 g — verify intended. Standard asthma dose is 2 g single bolus.');
+  if (dur < 15) warnings.push('⚠️ Infusion <15 min — risk of hypotension, flushing, bradycardia. Minimum 20 min recommended.');
+  if (dur > 30) warnings.push('ℹ️ Infusion >30 min — acceptable for maintenance/slower correction contexts.');
+
+  if (warnings.length) {
+    warnEl.className = grams > 3 || dur < 15 ? 'warn-box red' : 'warn-box yellow';
+    warnEl.style.display = 'flex';
+    warnEl.innerHTML = '<span style="flex-shrink:0;font-size:14px">⚠️</span><div style="font-size:11px;line-height:1.6">' + warnings.join('<br>') + '</div>';
+  } else {
+    warnEl.style.display = 'none';
+  }
+
+  document.getElementById('mg-result').classList.add('show');
+}
+
+// Salbutamol Calc
+function calcSalb() {
+  const wt = parseFloat(document.getElementById('salbwt').value);
+  const age = document.getElementById('salbage').value;
+  if(!wt || wt < 5) { alert('Enter valid weight'); return; }
+  
+  let dose, vol, freq;
+  if(age === 'adult') {
+    dose = '2.5–5 mg / neb';
+    vol = '1–2 ampul Ventolin® 2.5 mg/2.5 mL';
+    freq = 'q20 min × 3 (jam pertama), lalu q1–4 jam';
+  } else {
+    const d = Math.min(2.5, Math.max(0.15 * wt, 0.1 * wt));
+    const vials = (d / 2.5).toFixed(2);
+    dose = (0.15 * wt).toFixed(1) + ' mg (0.15 mg/kgBB)';
+    vol = vials + ' amp Ventolin® 2.5 mg/2.5 mL';
+    freq = 'q20 min × 3 (jam pertama), lalu q1–4 jam';
+  }
+  
+  document.getElementById('salb-dose').textContent = dose;
+  document.getElementById('salb-vol').textContent = vol;
+  document.getElementById('salb-freq').textContent = freq;
+  document.getElementById('salb-result').classList.add('show');
+}
+
+// PEF Calc
+function calcPef() {
+  const meas = parseFloat(document.getElementById('pef-meas').value);
+  const pred = parseFloat(document.getElementById('pef-pred').value);
+  if(!meas || !pred) { alert('Enter both values'); return; }
+  const pct = Math.round((meas/pred)*100);
+  
+  let zone, rec, color;
+  if(pct >= 70) { zone = '🟢 Green Zone (Mild/Resolved)'; rec = 'Discharge if clinically stable'; color = '#3fb950'; }
+  else if(pct >= 40) { zone = '🟡 Yellow Zone (Moderate)'; rec = 'Continue Rx, admit if no improvement'; color = '#d29922'; }
+  else { zone = '🔴 Red Zone (Severe)'; rec = 'Admit, escalate Rx, ICU readiness'; color = '#f85149'; }
+  
+  document.getElementById('pef-pct').textContent = pct + '%';
+  document.getElementById('pef-pct').style.color = color;
+  document.getElementById('pef-zone').textContent = zone;
+  document.getElementById('pef-zone').style.color = color;
+  document.getElementById('pef-rec').textContent = rec;
+  document.getElementById('pef-result').classList.add('show');
+}
+</script>
+
+</body>
+</html>
